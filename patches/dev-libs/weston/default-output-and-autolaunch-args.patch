@@ -1,0 +1,172 @@
+diff --git a/frontend/main.c b/frontend/main.c
+index 802b4a19..48863cb5 100644
+--- a/frontend/main.c
++++ b/frontend/main.c
+@@ -2524,7 +2524,7 @@ drm_config_find_controlling_output_section(struct weston_config *config,
+ 		free(clone_of);
+ 
+ 		if (!section)
+-			return NULL;
++			break; // No named section found, proceed to fallback
+ 
+ 		if (++depth > 10) {
+ 			weston_log("Configuration error: "
+@@ -2537,7 +2537,29 @@ drm_config_find_controlling_output_section(struct weston_config *config,
+ 						 &clone_of, NULL);
+ 	} while (clone_of);
+ 
+-	return section;
++	if (section)
++		return section;
++
++	/* If no named section was found, look for an unnamed [output] section
++	 * to use as a fallback. */
++	const char *section_name;
++	struct weston_config_section *unnamed_section = NULL;
++	struct weston_config_section *iter_section = NULL;
++
++	while (weston_config_next_section(config, &iter_section, &section_name)) {
++		if (strcmp(section_name, "output") == 0) {
++			char *name_key_value = NULL;
++			weston_config_section_get_string(iter_section, "name",
++							 &name_key_value, NULL);
++			if (name_key_value == NULL) {
++				unnamed_section = iter_section;
++				break; /* Found the first unnamed section, use it */
++			}
++			free(name_key_value);
++		}
++	}
++
++	return unnamed_section;
+ }
+ 
+ static struct wet_layoutput *
+@@ -2855,13 +2877,9 @@ drm_head_prepare_enable(struct wet_compositor *wet,
+ 			return;
+ 		free(mode);
+ 
+-		weston_config_section_get_string(section, "name",
+-						 &output_name, NULL);
+-		assert(output_name);
++		weston_config_section_get_string(section, "name",						 &output_name, NULL);		if (output_name == NULL) {			output_name = strdup(name);			if (!output_name) {				weston_log("Failed to allocate memory for output_name\n");				return;			}		}
+ 
+-		wet_compositor_layoutput_add_head(wet, output_name,
+-						  section, head);
+-		free(output_name);
++		wet_compositor_layoutput_add_head(wet, output_name,						  section, head);		free(output_name);
+ 	} else {
+ 		wet_compositor_layoutput_add_head(wet, name, NULL, head);
+ 	}
+@@ -4396,10 +4414,15 @@ execute_autolaunch(struct wet_compositor *wet, struct weston_config *config)
+ 	int ret = -1;
+ 	pid_t tmp_pid = -1;
+ 	char *autolaunch_path = NULL;
++	char *autolaunch_args_str = NULL;
++	char **exec_argv = NULL;
++	int exec_argc = 0;
+ 	struct weston_config_section *section = NULL;
++	int i;
+ 
+ 	section = weston_config_get_section(config, "autolaunch", NULL, NULL);
+ 	weston_config_section_get_string(section, "path", &autolaunch_path, "");
++	weston_config_section_get_string(section, "args", &autolaunch_args_str, NULL);
+ 	weston_config_section_get_bool(section, "watch", &wet->autolaunch_watch, false);
+ 
+ 	if (!strlen(autolaunch_path))
+@@ -4410,14 +4433,72 @@ execute_autolaunch(struct wet_compositor *wet, struct weston_config *config)
+ 		goto out;
+ 	}
+ 
++	// Determine total number of arguments for exec_argv
++	int args_count = 0;
++	if (autolaunch_args_str) {
++		char *temp_s = strdup(autolaunch_args_str);
++		if (temp_s) {
++			char *saveptr;
++			char *token = strtok_r(temp_s, " ", &saveptr);
++			while (token != NULL) {
++				args_count++;
++				token = strtok_r(NULL, " ", &saveptr);
++			}
++			free(temp_s);
++		}
++	}
++
++	exec_argc = 1 + args_count; // Program name + arguments
++
++	exec_argv = xcalloc(exec_argc + 1, sizeof(char*)); // +1 for NULL terminator
++	if (!exec_argv) {
++		weston_log("Failed to allocate memory for exec_argv.\n");
++		goto out;
++	}
++
++	exec_argv[0] = strdup(autolaunch_path); // Duplicate program path
++	if (!exec_argv[0]) {
++		weston_log("Failed to duplicate autolaunch path.\n");
++		goto out;
++	}
++
++	if (autolaunch_args_str) {
++		char *s_copy_for_tokens = strdup(autolaunch_args_str);
++		if (!s_copy_for_tokens) {
++			weston_log("Failed to duplicate autolaunch args string.\n");
++			goto out;
++		}
++
++		char *saveptr;
++		char *token = strtok_r(s_copy_for_tokens, " ", &saveptr);
++		i = 1; // Start populating from index 1
++		while (token != NULL) {
++			exec_argv[i] = strdup(token);
++			if (!exec_argv[i]) {
++				weston_log("Failed to duplicate argument token.\n");
++				// Clean up already duplicated tokens
++				for (int j = 0; j < i; j++) free(exec_argv[j]);
++				free(exec_argv);
++				free(s_copy_for_tokens);
++				goto out;
++			}
++			i++;
++			token = strtok_r(NULL, " ", &saveptr);
++		}
++		free(s_copy_for_tokens);
++	}
++	exec_argv[exec_argc] = NULL; // NULL terminate the array
++
+ 	tmp_pid = fork();
+ 	if (tmp_pid == -1) {
+ 		weston_log("Failed to fork autolaunch process: %s\n", strerror(errno));
+ 		goto out;
+ 	} else if (tmp_pid == 0) {
+ 		cleanup_for_child_process();
+-		execl(autolaunch_path, autolaunch_path, NULL);
+-		/* execl shouldn't return */
++		// Use execv instead of execl
++		execv(exec_argv[0], exec_argv);
++
++		// If execv fails, print error and exit child process
+ 		fprintf(stderr, "Failed to execute autolaunch: %s\n", strerror(errno));
+ 		_exit(1);
+ 	}
+@@ -4425,8 +4506,19 @@ execute_autolaunch(struct wet_compositor *wet, struct weston_config *config)
+ out_ok:
+ 	ret = 0;
+ out:
+-	wet->autolaunch_pid = tmp_pid;
++	// Free allocated memory in parent process.
++	// The strings in exec_argv are now owned by the child process if execv succeeds.
++	// If execv fails in child, child exits, so parent doesn't need to worry about them.
++	// So, only free the exec_argv array itself, not its elements.
++	// Also free autolaunch_path and autolaunch_args_str here.
+ 	free(autolaunch_path);
++	free(autolaunch_args_str);
++	if (exec_argv) {
++		for (i = 0; i < exec_argc; i++) free(exec_argv[i]);
++		free(exec_argv);
++	}
++
++	wet->autolaunch_pid = tmp_pid;
+ 	return ret;
+ }
+ 

@@ -1,0 +1,103 @@
+{
+    "packages":[
+        "genpack/walbrix",
+
+        "net-misc/networkmanager",
+        "net-misc/modemmanager",
+
+        "net-dns/bind-tools",
+        "net-analyzer/traceroute",
+        "net-analyzer/netcat",
+        "net-analyzer/iftop",
+        "net-firewall/ipset",
+        "net-firewall/nftables",
+        "net-misc/wakeonlan",
+        "net-misc/whois",
+        "net-analyzer/net-snmp",
+        "net-misc/iperf",
+        "net-misc/bridge-utils",
+        "net-dialup/rp-pppoe",
+        "net-dialup/ppp-scripts",
+        "net-analyzer/nmap",
+        "net-analyzer/snort",
+        "net-misc/ndisc6",
+        "net-vpn/openvpn",
+        "net-vpn/tailscale",
+        "net-misc/socat",
+        "dev-libs/openssl-compat",
+        "net-misc/rclone",
+        "net-fs/ksmbd-tools",
+        "net-analyzer/zabbix",
+        "net-misc/vconfig",
+        "net-dialup/picocom",
+
+        "sys-fs/compsize",
+        "app-admin/sysstat",
+        "sys-process/lsof",
+        "sys-fs/squashfs-tools",
+        "sys-fs/mdadm",
+        "net-ftp/ftp",
+        "net-fs/nfs-utils",
+        "sys-fs/multipath-tools",
+        "sys-fs/exfat-utils",
+        "net-fs/cifs-utils",
+        "sys-fs/cryptsetup",
+        "sys-block/nbd",
+        "sys-apps/sg3_utils",
+        "sys-fs/ddrescue",
+        "app-admin/testdisk",
+        "sys-apps/gptfdisk",
+        "sys-block/open-iscsi",
+        "sys-fs/bcache-tools",
+        "sys-fs/bcachefs-tools",
+        "app-misc/tmux",
+        "app-misc/screen",
+        "sys-block/zram-init",
+        "sys-process/iotop",
+        "sys-process/audit",
+        "app-benchmarks/stress",
+        "app-admin/sudo",
+        "sys-apps/rng-tools",
+        "app-backup/rdiff-backup",
+        "app-backup/borgbackup",
+        "app-backup/btrbk",
+        "sys-power/nut",
+        "dev-build/cmake",
+        "dev-python/pip",
+        "dev-vcs/git",
+        "media-sound/alsa-utils",
+
+        "sys-apps/create-sriov-vfs",
+        "app-misc/status-beep",
+    ],
+    "binpkg-exclude": [
+        "dev-libs/weston",
+    ],
+    "accept_keywords": {
+        "app-crypt/gocryptfs":null,
+        "net-analyzer/snort":null,
+        "net-fs/ksmbd-tools": null,
+    },
+    "use": {
+        "genpack/systemimg": "baremetal",
+        "dev-libs/weston": "-X kiosk jpeg webp", // for wbui
+        "sys-auth/seatd": "server",
+        "gui-libs/gtk": "-X wayland", // for wbui
+        "media-libs/mesa": "-X wayland", // for wbui
+        "media-libs/libepoxy": "-X", // for gtk4
+        "x11-libs/gtk+": "-X wayland", // adwaita-icon-theme needs gtk+3 at build time
+        "sys-fs/squashfuse": "lz4 lzma lzo zstd", // fo vm
+        "sys-libs/zlib": "minizip", // for genpack-install
+        "sys-boot/grub": "GRUB_PLATFORMS: efi-32", // for genpack-bootloader
+        "net-wireless/wpa_supplicant": "dbus", // for networkmanager
+        "net-analyzer/zabbix": "sqlite agent proxy curl snmp -postgres",
+        "net-analyzer/fping": "suid"
+    },
+    "license": {
+        "sys-kernel/linux-firmware": "linux-fw-redistributable",
+        "net-analyzer/fping":"fping"
+    },
+    "services": [
+        "fstrim.timer", "seatd", "wbui"
+    ]
+}
