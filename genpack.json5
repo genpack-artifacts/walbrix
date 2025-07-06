@@ -98,6 +98,6 @@
         "net-analyzer/fping":"fping"
     },
     "services": [
-        "fstrim.timer", "seatd", "wbui"
+        "fstrim.timer", "seatd", "wbui", "rngd"
     ]
 }
