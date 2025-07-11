@@ -1,5 +1,5 @@
 {
-    "packages":[
+    packages:[
         "genpack/walbrix",
 
         "net-misc/networkmanager",
@@ -70,15 +70,15 @@
         "sys-apps/create-sriov-vfs",
         "app-misc/status-beep",
     ],
-    "binpkg-exclude": [
+    binpkg_exclude: [
         "dev-libs/weston",
     ],
-    "accept_keywords": {
+    accept_keywords: {
         "app-crypt/gocryptfs":null,
         "net-analyzer/snort":null,
         "net-fs/ksmbd-tools": null,
     },
-    "use": {
+    use: {
         "genpack/systemimg": "baremetal",
         "dev-libs/weston": "-X kiosk jpeg webp", // for wbui
         "sys-auth/seatd": "server",
@@ -93,11 +93,11 @@
         "net-analyzer/zabbix": "sqlite agent proxy curl snmp -postgres",
         "net-analyzer/fping": "suid"
     },
-    "license": {
+    license: {
         "sys-kernel/linux-firmware": "linux-fw-redistributable",
         "net-analyzer/fping":"fping"
     },
-    "services": [
+    services: [
         "fstrim.timer", "seatd", "wbui", "rngd"
     ]
 }
