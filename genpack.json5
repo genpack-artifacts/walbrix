@@ -70,8 +70,9 @@
 
         "sys-apps/create-sriov-vfs",
         "app-misc/status-beep",
+        "dev-libs/weston-deferred"
     ],
-    binpkg_exclude: [
+    binpkg_excludes: [
         "dev-libs/weston",
     ],
     accept_keywords: {
