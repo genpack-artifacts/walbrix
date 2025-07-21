@@ -76,17 +76,25 @@
         "dev-libs/weston",
     ],
     accept_keywords: {
+        "sys-kernel/gentoo-kernel-bin":null,
+        "virtual/dist-kernel":null,
+        "app-emulation/qemu":null,
+        "media-libs/mesa":null,
+        "dev-util/mesa_clc":null,
+        "=media-libs/virglrenderer-9999":"**", // to support vulkan in QEMU guest
         "app-crypt/gocryptfs":null,
         "net-analyzer/snort":null,
         "net-fs/ksmbd-tools": null,
     },
     use: {
         "genpack/systemimg": "baremetal",
+        "app-emulation/qemu": "aio bzip2 curl fdt filecaps -gtk jpeg ncurses nls virtfs -oss pin-upstream-blobs png vhost-user-fs -pulseaudio -python usb vhost-net vnc spice xattr virgl opengl xfs -xkb -xen QEMU_SOFTMMU_TARGETS: x86_64 aarch64 riscv64 QEMU_USER_TARGETS: aarch64 riscv64",
+        "media-libs/libglvnd": "X", // for qemu[opengl]
+        "media-libs/libepoxy": "X", // for qemu[opengl]
         "dev-libs/weston": "-X kiosk jpeg webp", // for wbui
         "sys-auth/seatd": "server",
         "gui-libs/gtk": "-X wayland", // for wbui
-        "media-libs/mesa": "-X wayland", // for wbui
-        "media-libs/libepoxy": "-X", // for gtk4
+        "media-libs/mesa": "-X wayland vulkan VIDEO_CARDS: virgl zink", // for wbui
         "x11-libs/gtk+": "-X wayland", // adwaita-icon-theme needs gtk+3 at build time
         "sys-fs/squashfuse": "lz4 lzma lzo zstd", // fo vm
         "sys-libs/zlib": "minizip", // for genpack-install
