@@ -1,4 +1,5 @@
 {
+    profile: "baremetal",
     compression:"xz",
     packages:[
         "genpack/walbrix",
@@ -87,7 +88,6 @@
         "net-fs/ksmbd-tools": null,
     },
     use: {
-        "genpack/systemimg": "baremetal",
         "app-emulation/qemu": "aio bzip2 curl fdt filecaps -gtk jpeg ncurses nls virtfs -oss pin-upstream-blobs png vhost-user-fs -pulseaudio -python usb vhost-net vnc spice xattr virgl opengl xfs -xkb -xen QEMU_SOFTMMU_TARGETS: x86_64 aarch64 riscv64 QEMU_USER_TARGETS: aarch64 riscv64",
         "media-libs/libglvnd": "X", // for qemu[opengl]
         "media-libs/libepoxy": "X", // for qemu[opengl]
