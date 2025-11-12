@@ -92,6 +92,7 @@
         "media-libs/libglvnd": "X", // for qemu[opengl]
         "media-libs/libepoxy": "X", // for qemu[opengl]
         "dev-libs/weston": "-X kiosk jpeg webp", // for wbui
+        "media-libs/freetype": "harfbuzz",
         "sys-auth/seatd": "server",
         "gui-libs/gtk": "-X wayland", // for wbui
         "media-libs/mesa": "-X wayland vulkan VIDEO_CARDS: virgl zink", // for wbui
