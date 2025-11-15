@@ -102,12 +102,16 @@
         "sys-boot/grub": "GRUB_PLATFORMS: efi-32", // for genpack-bootloader
         "net-wireless/wpa_supplicant": "dbus", // for networkmanager
         "net-analyzer/zabbix": "sqlite agent proxy curl snmp -postgres",
-        "net-analyzer/fping": "suid"
+        "net-analyzer/fping": "suid",
+        "net-misc/rsync": "xxhash rrsync",
     },
     license: {
         "sys-kernel/linux-firmware": "linux-fw-redistributable",
         "net-analyzer/fping":"fping"
     },
+    setup_commands: [
+        "chmod -x /etc/cron.hourly/cciss_vol_status"
+    ],
     services: [
         "fstrim.timer", "seatd", "wbui", "rngd"
     ]
