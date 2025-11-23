@@ -82,7 +82,8 @@
         "app-emulation/qemu":null,
         "media-libs/mesa":null,
         "dev-util/mesa_clc":null,
-        "=media-libs/virglrenderer-9999":"**", // to support vulkan in QEMU guest
+        //"=media-libs/virglrenderer-9999":"**", // to support vulkan in QEMU guest
+        "media-libs/virglrenderer":null,
         "app-crypt/gocryptfs":null,
         "net-analyzer/snort":null,
         "net-fs/ksmbd-tools": null,
