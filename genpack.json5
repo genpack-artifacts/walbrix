@@ -70,7 +70,6 @@
         "media-sound/alsa-utils",
 
         "sys-apps/create-sriov-vfs",
-        "app-misc/status-beep",
         "dev-libs/weston-deferred"
     ],
     binpkg_excludes: [
@@ -111,9 +110,37 @@
         "net-analyzer/fping":"fping"
     },
     setup_commands: [
-        "chmod -x /etc/cron.hourly/cciss_vol_status"
+        "if [ -x /etc/cron.hourly/cciss_vol_status ]; then chmod -x /etc/cron.hourly/cciss_vol_status; fi"
     ],
     services: [
         "fstrim.timer", "seatd", "wbui", "rngd"
-    ]
+    ],
+    arch: {
+        "x86_64": {
+            packages: [
+                "app-misc/status-beep",
+            ]
+        },
+        "aarch64": {
+            accept_keywords: {
+                "app-admin/testdisk":null,
+                "app-backup/rdiff-backup":null,
+                "app-benchmarks/stress":null,
+                "net-analyzer/iftop":null,
+                "net-ftp/ftp":null,
+                "net-misc/rclone":null,
+                "net-misc/wakeonlan":null,
+                "sys-fs/compsize":null,
+                "sys-fs/ddrescue":null,
+                "sys-fs/exfat-utils":null,
+                "sys-power/nut":null,
+                "net-libs/daq":null,
+                "app-emulation/virtiofsd":null,
+                "sys-fs/squashfuse":"**",
+                "dev-cpp/libxmlpp":null,
+                "dev-python/pylibacl":null,
+                "net-libs/librsync":null,
+            }
+        }
+    }
 }
