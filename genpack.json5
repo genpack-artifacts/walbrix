@@ -3,6 +3,8 @@
     compression:"xz",
     packages:[
         "genpack/walbrix",
+        "genpack/wireless",
+        "genpack/genpack",
 
         "net-misc/networkmanager",
         "net-misc/modemmanager",
@@ -140,7 +142,7 @@
                 "dev-cpp/libxmlpp":null,
                 "dev-python/pylibacl":null,
                 "net-libs/librsync":null,
-            }
+            },
         }
     }
 }
