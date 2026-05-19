@@ -106,6 +106,7 @@
         "net-analyzer/zabbix": "sqlite agent proxy curl snmp -postgres",
         "net-analyzer/fping": "suid",
         "net-misc/rsync": "xxhash rrsync",
+        "net-libs/ngtcp2": "gnutls", // samba requires this
     },
     license: {
         "sys-kernel/linux-firmware": "linux-fw-redistributable",
