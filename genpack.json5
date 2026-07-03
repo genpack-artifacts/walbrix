@@ -53,7 +53,7 @@
         "sys-apps/gptfdisk",
         "sys-block/open-iscsi",
         "sys-fs/bcache-tools",
-        "sys-fs/bcachefs-tools",
+        //"sys-fs/bcachefs-tools",
         "app-misc/tmux",
         "app-misc/screen",
         "sys-block/zram-init",
@@ -88,6 +88,7 @@
         "app-crypt/gocryptfs":null,
         "net-analyzer/snort":null,
         "net-fs/ksmbd-tools": null,
+        "sys-fs/bcachefs-tools": null,
     },
     use: {
         "app-emulation/qemu": "aio bzip2 curl fdt filecaps -gtk jpeg ncurses nls virtfs -oss pin-upstream-blobs png vhost-user-fs -pulseaudio -python usb vhost-net vnc spice xattr virgl opengl xfs -xkb -xen QEMU_SOFTMMU_TARGETS: x86_64 aarch64 riscv64 QEMU_USER_TARGETS: aarch64 riscv64",
