@@ -9,7 +9,7 @@
         "net-misc/networkmanager",
         "net-misc/modemmanager",
 
-        "net-dns/bind-tools",
+        "net-dns/doggo",
         "net-analyzer/traceroute",
         "net-analyzer/netcat",
         "net-analyzer/iftop",
