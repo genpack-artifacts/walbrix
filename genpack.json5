@@ -83,7 +83,6 @@
         "app-emulation/qemu":null,
         "media-libs/mesa":null,
         "dev-util/mesa_clc":null,
-        //"=media-libs/virglrenderer-9999":"**", // to support vulkan in QEMU guest
         "media-libs/virglrenderer":null,
         "app-crypt/gocryptfs":null,
         "net-analyzer/snort":null,
@@ -94,6 +93,7 @@
         "app-emulation/qemu": "aio bzip2 curl fdt filecaps -gtk jpeg ncurses nls virtfs -oss pin-upstream-blobs png vhost-user-fs -pulseaudio -python usb vhost-net vnc spice xattr virgl opengl xfs -xkb -xen QEMU_SOFTMMU_TARGETS: x86_64 aarch64 riscv64 QEMU_USER_TARGETS: aarch64 riscv64",
         "media-libs/libglvnd": "X", // for qemu[opengl]
         "media-libs/libepoxy": "X", // for qemu[opengl]
+        "media-libs/virglrenderer": "venus video_cards_amdgpu", // venus: vulkan in QEMU guest
         "dev-libs/weston": "-X kiosk jpeg webp", // for wbui
         "media-libs/freetype": "harfbuzz",
         "sys-auth/seatd": "server",
