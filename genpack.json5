@@ -27,6 +27,7 @@
         "net-misc/ndisc6",
         "net-vpn/openvpn",
         "net-vpn/tailscale",
+        "net-misc/magic-wormhole-rust",
         "net-misc/socat",
         "dev-libs/openssl-compat",
         "net-misc/rclone",
@@ -88,6 +89,7 @@
         "net-analyzer/snort":null,
         "net-fs/ksmbd-tools": null,
         "sys-fs/bcachefs-tools": null,
+        "net-misc/magic-wormhole-rust": null,
     },
     use: {
         "app-emulation/qemu": "aio bzip2 curl fdt filecaps -gtk jpeg ncurses nls virtfs -oss pin-upstream-blobs png vhost-user-fs -pulseaudio -python usb vhost-net vnc spice xattr virgl opengl xfs -xkb -xen QEMU_SOFTMMU_TARGETS: x86_64 aarch64 riscv64 QEMU_USER_TARGETS: aarch64 riscv64",
